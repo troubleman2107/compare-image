@@ -125,6 +125,14 @@ def writeUi():
     # Start the Tkinter event loop
     window.mainloop()
 
+def resize_image(file_path):
+    original_image = Image.open(file_path)
+    original_size = original_image.size
+    new_size = (original_size[0] // 2, original_size[1] // 2)
+    resized_image = original_image.resize(new_size)
+    return resized_image
+
+
 
 def writeIntoExcel(file_path1): 
     # Create a new Excel workbook
@@ -138,12 +146,10 @@ def writeIntoExcel(file_path1):
     start_cell = 'A2'
     end_cell = 'A40'
 
-    img_old = ExcelImage(file_path1)
-    num_rows = ws[start_cell:end_cell][0]
-    num_rows = len(num_rows)
-    ws.add_image(img_old, start_cell)
-    img_old.width = img_old.width * num_rows
-    img_old.height = img_old.height * num_rows
+    #Image old
+
+    img_old = ExcelImage(resize_image(file_path1))
+    ws.add_image(img_old, 'A2')
 
     # Save the workbook
     wb.save('output.xlsx')
