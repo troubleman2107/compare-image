@@ -134,22 +134,43 @@ def resize_image(file_path):
 
 
 
-def writeIntoExcel(file_path1): 
+def writeIntoExcel(file_path1, file_path2, output_path): 
     # Create a new Excel workbook
     wb = Workbook()
     ws = wb.active
 
 
+    #Image old
     ws['A1'].value = 'Layout old'
     ws['A1'].font = Font(size=12, bold=True)
 
-    start_cell = 'A2'
-    end_cell = 'A40'
+    img_old = ExcelImage(file_path1)
+    ws.add_image(img_old, 'A3')
 
-    #Image old
+    img_old.width = img_old.width / 2
+    img_old.height = img_old.height / 2
 
-    img_old = ExcelImage(resize_image(file_path1))
-    ws.add_image(img_old, 'A2')
+    #Image new
+    ws['Q1'].value = 'Layout new'
+    ws['Q1'].font = Font(size=12, bold=True)
+
+    img_new = ExcelImage(file_path2)
+    ws.add_image(img_new, 'Q3')
+
+    img_new.width = img_new.width / 2
+    img_new.height = img_new.height / 2
+
+    #Output
+    ws['AG1'].value = 'Diff'
+    ws['AG1'].font = Font(size=12, bold=True)
+
+    output_path_img = ExcelImage(output_path)
+    ws.add_image(output_path_img, 'AG3')
+
+    output_path_img.width = output_path_img.width / 2
+    output_path_img.height = output_path_img.height / 2
+
+    
 
     # Save the workbook
     wb.save('output.xlsx')
@@ -162,7 +183,7 @@ def on_button_click():
     # Print the file paths (you can modify this part as needed)
     compare_images(file_path1, file_path2, './diff.png')
 
-    writeIntoExcel(file_path1)
+    writeIntoExcel(file_path1, file_path2, './diff.png')
     
 
 
